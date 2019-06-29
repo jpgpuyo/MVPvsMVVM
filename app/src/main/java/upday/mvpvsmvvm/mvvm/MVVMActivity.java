@@ -1,5 +1,6 @@
 package upday.mvpvsmvvm.mvvm;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.widget.Button;
 
 import upday.mvpvsmvvm.DroidconApplication;
 import upday.mvpvsmvvm.R;
+import upday.mvpvsmvvm.databinding.ActivityMainBinding;
 import upday.mvpvsmvvm.datamodel.IDataModel;
 import upday.mvpvsmvvm.dialoghelper.DialogHelper;
 
@@ -24,9 +26,12 @@ public class MVVMActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        ActivityMainBinding binding = DataBindingUtil.setContentView(
+                this, R.layout.activity_main);
         mViewModel = new ViewModel(getDataModel());
+        binding.setViewModel(mViewModel);
+
         dialogHelper = new DialogHelper();
         setupViews();
     }
@@ -34,7 +39,6 @@ public class MVVMActivity extends AppCompatActivity {
     private void setupViews() {
         buttonGreeting = findViewById(R.id.buttonGreeting);
         buttonGreeting.setOnClickListener(v -> mViewModel.onGreetingClicked());
-        mViewModel.greetingSubject.subscribe(this::setGreeting);
     }
 
     @Override

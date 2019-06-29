@@ -1,5 +1,6 @@
 package upday.mvpvsmvvm.mvvm;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,6 +12,8 @@ import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 import upday.mvpvsmvvm.RxSchedulersTestRule;
 import upday.mvpvsmvvm.datamodel.IDataModel;
+
+import static org.junit.Assert.assertEquals;
 
 public class ViewModelTest {
 
@@ -32,20 +35,19 @@ public class ViewModelTest {
     @Test
     public void showDroidconGreeting_whenGreetingClickedAndPreviousNumberOfClicksIsEven() {
         String standardGreeting = "Hello!";
-        String greetingDroidcon = "Hello Droidcon!";
+        String droidconGreeting = "Hello Droidcon!";
         Mockito.when(mDataModel.getStandardGreeting()).thenReturn(Observable.just(standardGreeting));
-        Mockito.when(mDataModel.getDroidconGreeting()).thenReturn(Observable.just(greetingDroidcon));
+        Mockito.when(mDataModel.getDroidconGreeting()).thenReturn(Observable.just(droidconGreeting));
         TestObserver<String> testObserver = new TestObserver<>();
 
         mViewModel.bind();
         mViewModel.numberOfClicks = 4;
-        mViewModel.greetingSubject.subscribe(testObserver);
         mViewModel.onGreetingClicked();
 
         rxSchedulersTestRule.computationScheduler().triggerActions();
         rxSchedulersTestRule.mainScheduler().triggerActions();
 
-        testObserver.assertValue(greetingDroidcon);
+        assertEquals(droidconGreeting, mViewModel.greetingMessage.get());
     }
 
     @Test
@@ -54,17 +56,15 @@ public class ViewModelTest {
         String greetingDroidcon = "Hello Droidcon!";
         Mockito.when(mDataModel.getStandardGreeting()).thenReturn(Observable.just(standardGreeting));
         Mockito.when(mDataModel.getDroidconGreeting()).thenReturn(Observable.just(greetingDroidcon));
-        TestObserver<String> testObserver = new TestObserver<>();
 
         mViewModel.bind();
         mViewModel.numberOfClicks = 5;
-        mViewModel.greetingSubject.subscribe(testObserver);
         mViewModel.onGreetingClicked();
 
         rxSchedulersTestRule.computationScheduler().triggerActions();
         rxSchedulersTestRule.mainScheduler().triggerActions();
 
-        testObserver.assertValue(standardGreeting);
+        assertEquals(standardGreeting, mViewModel.greetingMessage.get());
     }
 
 }

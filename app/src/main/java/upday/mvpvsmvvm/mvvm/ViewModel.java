@@ -1,12 +1,12 @@
 package upday.mvpvsmvvm.mvvm;
 
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
 import upday.mvpvsmvvm.datamodel.IDataModel;
 
 /**
@@ -19,13 +19,12 @@ public class ViewModel implements IViewModel {
 
     private CompositeDisposable mSubscription;
 
-    public PublishSubject<String> greetingSubject;
+    public ObservableField<String> greetingMessage = new ObservableField<>();
 
     int numberOfClicks;
 
     public ViewModel(@NonNull final IDataModel dataModel) {
         mDataModel = dataModel;
-        greetingSubject = PublishSubject.create();
         numberOfClicks = 0;
     }
 
@@ -51,6 +50,8 @@ public class ViewModel implements IViewModel {
         mSubscription.add(greetingObservable
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(greeting -> greetingSubject.onNext(greeting)));
+                .subscribe(greeting -> {
+                    greetingMessage.set(greeting);
+                }));
     }
 }
