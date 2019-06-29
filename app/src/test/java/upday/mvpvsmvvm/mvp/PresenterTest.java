@@ -27,13 +27,30 @@ public class PresenterTest {
     }
 
     @Test
-    public void testGetGreeting_set_whenGreetingClicked() {
-        String greeting = "Hello!";
-        Mockito.when(mDataModel.getGreeting()).thenReturn(Observable.just(greeting));
+    public void showDroidconGreeting_whenGreetingClickedAndPreviousNumberOfClicksIsEven() {
+        String standardGreeting = "Hello!";
+        String droidconGreeting = "Hello Droidcon!";
+        Mockito.when(mDataModel.getStandardGreeting()).thenReturn(Observable.just(standardGreeting));
+        Mockito.when(mDataModel.getDroidconGreeting()).thenReturn(Observable.just(droidconGreeting));
 
         mPresenter.bind();
+        mPresenter.numberOfClicks = 4;
         mPresenter.onGreetingClicked();
 
-        Mockito.verify(mView).setGreeting(greeting);
+        Mockito.verify(mView).setGreeting(droidconGreeting);
+    }
+
+    @Test
+    public void showStandardGreeting_whenGreetingClickedAndPreviousNumberOfClicksIsOdd() {
+        String standardGreeting = "Hello!";
+        String droidconGreeting = "Hello Droidcon!";
+        Mockito.when(mDataModel.getStandardGreeting()).thenReturn(Observable.just(standardGreeting));
+        Mockito.when(mDataModel.getDroidconGreeting()).thenReturn(Observable.just(droidconGreeting));
+
+        mPresenter.bind();
+        mPresenter.numberOfClicks = 5;
+        mPresenter.onGreetingClicked();
+
+        Mockito.verify(mView).setGreeting(standardGreeting);
     }
 }

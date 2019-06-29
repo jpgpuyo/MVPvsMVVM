@@ -2,6 +2,7 @@ package upday.mvpvsmvvm.mvvm;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -20,9 +21,12 @@ public class ViewModel implements IViewModel {
 
     public PublishSubject<String> greetingSubject;
 
+    int numberOfClicks;
+
     public ViewModel(@NonNull final IDataModel dataModel) {
         mDataModel = dataModel;
         greetingSubject = PublishSubject.create();
+        numberOfClicks = 0;
     }
 
     @Override
@@ -37,7 +41,14 @@ public class ViewModel implements IViewModel {
 
     @Override
     public void onGreetingClicked() {
-        mSubscription.add(mDataModel.getGreeting()
+        Observable<String> greetingObservable;
+        numberOfClicks++;
+        if (numberOfClicks % 2 == 0) {
+            greetingObservable = mDataModel.getStandardGreeting();
+        } else {
+            greetingObservable = mDataModel.getDroidconGreeting();
+        }
+        mSubscription.add(greetingObservable
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(greeting -> greetingSubject.onNext(greeting)));

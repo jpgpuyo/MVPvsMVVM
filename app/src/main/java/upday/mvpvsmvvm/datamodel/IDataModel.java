@@ -8,6 +8,9 @@ import io.reactivex.Observable;
 public interface IDataModel {
 
     @NonNull
-    Observable<String> getGreeting();
+    Observable<String> getStandardGreeting();
+
+    @NonNull
+    Observable<String> getDroidconGreeting();
 
 }

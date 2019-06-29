@@ -30,19 +30,41 @@ public class ViewModelTest {
     }
 
     @Test
-    public void testGreetingSubject_set_whenGreetingClicked() {
-        String greeting = "Hello!";
-        Mockito.when(mDataModel.getGreeting()).thenReturn(Observable.just(greeting));
+    public void showDroidconGreeting_whenGreetingClickedAndPreviousNumberOfClicksIsEven() {
+        String standardGreeting = "Hello!";
+        String greetingDroidcon = "Hello Droidcon!";
+        Mockito.when(mDataModel.getStandardGreeting()).thenReturn(Observable.just(standardGreeting));
+        Mockito.when(mDataModel.getDroidconGreeting()).thenReturn(Observable.just(greetingDroidcon));
         TestObserver<String> testObserver = new TestObserver<>();
 
         mViewModel.bind();
+        mViewModel.numberOfClicks = 4;
         mViewModel.greetingSubject.subscribe(testObserver);
         mViewModel.onGreetingClicked();
 
         rxSchedulersTestRule.computationScheduler().triggerActions();
         rxSchedulersTestRule.mainScheduler().triggerActions();
 
-        testObserver.assertValue(greeting);
+        testObserver.assertValue(greetingDroidcon);
+    }
+
+    @Test
+    public void showStandardGreeting_whenGreetingClickedAndPreviousNumberOfClicksIsOdd() {
+        String standardGreeting = "Hello!";
+        String greetingDroidcon = "Hello Droidcon!";
+        Mockito.when(mDataModel.getStandardGreeting()).thenReturn(Observable.just(standardGreeting));
+        Mockito.when(mDataModel.getDroidconGreeting()).thenReturn(Observable.just(greetingDroidcon));
+        TestObserver<String> testObserver = new TestObserver<>();
+
+        mViewModel.bind();
+        mViewModel.numberOfClicks = 5;
+        mViewModel.greetingSubject.subscribe(testObserver);
+        mViewModel.onGreetingClicked();
+
+        rxSchedulersTestRule.computationScheduler().triggerActions();
+        rxSchedulersTestRule.mainScheduler().triggerActions();
+
+        testObserver.assertValue(standardGreeting);
     }
 
 }

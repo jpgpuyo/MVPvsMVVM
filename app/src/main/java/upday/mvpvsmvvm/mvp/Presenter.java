@@ -2,6 +2,7 @@ package upday.mvpvsmvvm.mvp;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import upday.mvpvsmvvm.datamodel.IDataModel;
 
@@ -18,10 +19,13 @@ public class Presenter implements IPresenter {
 
     private CompositeDisposable mSubscription;
 
+    int numberOfClicks;
+
     public Presenter(@NonNull final IDataModel dataModel,
                      @NonNull final IView view) {
         mDataModel = dataModel;
         mView = view;
+        numberOfClicks = 0;
     }
 
     @Override
@@ -30,7 +34,15 @@ public class Presenter implements IPresenter {
     }
 
     public void onGreetingClicked() {
-        mSubscription.add(mDataModel.getGreeting()
+        Observable<String> greetingObservable;
+        numberOfClicks++;
+
+        if (numberOfClicks % 2 == 0) {
+            greetingObservable = mDataModel.getStandardGreeting();
+        } else {
+            greetingObservable = mDataModel.getDroidconGreeting();
+        }
+        mSubscription.add(greetingObservable
                 .subscribe(this::setGreeting));
     }
 
