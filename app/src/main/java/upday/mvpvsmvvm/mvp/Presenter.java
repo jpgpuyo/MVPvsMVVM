@@ -34,24 +34,19 @@ public class Presenter implements IPresenter {
     }
 
     public void onGreetingClicked() {
-        Observable<String> greetingObservable;
         numberOfClicks++;
 
         if (numberOfClicks % 2 == 0) {
-            greetingObservable = mDataModel.getStandardGreeting();
+            mSubscription.add(mDataModel.getStandardGreeting()
+                    .subscribe(mView::showStandardGreetingDialog));
         } else {
-            greetingObservable = mDataModel.getDroidconGreeting();
+            mSubscription.add(mDataModel.getDroidconGreeting()
+                    .subscribe(mView::showDroidconGreetingDialog));
         }
-        mSubscription.add(greetingObservable
-                .subscribe(this::setGreeting));
     }
 
     @Override
     public void unBind() {
         mSubscription.clear();
-    }
-
-    private void setGreeting(@NonNull final String greeting) {
-        mView.setGreeting(greeting);
     }
 }

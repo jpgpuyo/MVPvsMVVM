@@ -10,15 +10,11 @@ import upday.mvpvsmvvm.DroidconApplication;
 import upday.mvpvsmvvm.R;
 import upday.mvpvsmvvm.databinding.ActivityMainBinding;
 import upday.mvpvsmvvm.datamodel.IDataModel;
-import upday.mvpvsmvvm.dialoghelper.DialogHelper;
 
 public class MVVMActivity extends AppCompatActivity {
 
     @NonNull
     private ViewModel mViewModel;
-
-    @NonNull
-    private DialogHelper dialogHelper;
 
     @NonNull
     private Button buttonGreeting;
@@ -32,7 +28,6 @@ public class MVVMActivity extends AppCompatActivity {
         mViewModel = new ViewModel(getDataModel());
         binding.setViewModel(mViewModel);
 
-        dialogHelper = new DialogHelper();
         setupViews();
     }
 
@@ -51,10 +46,6 @@ public class MVVMActivity extends AppCompatActivity {
     protected void onPause() {
         mViewModel.unBind();
         super.onPause();
-    }
-
-    private void setGreeting(@NonNull final String greeting) {
-        dialogHelper.showDialog(this, greeting, greeting);
     }
 
     @NonNull

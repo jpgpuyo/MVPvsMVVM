@@ -47,6 +47,7 @@ public class ViewModelTest {
         rxSchedulersTestRule.computationScheduler().triggerActions();
         rxSchedulersTestRule.mainScheduler().triggerActions();
 
+        assertEquals(GreetingType.DROIDCON, mViewModel.greetingType.get());
         assertEquals(droidconGreeting, mViewModel.greetingMessage.get());
     }
 
@@ -64,6 +65,7 @@ public class ViewModelTest {
         rxSchedulersTestRule.computationScheduler().triggerActions();
         rxSchedulersTestRule.mainScheduler().triggerActions();
 
+        assertEquals(GreetingType.STANDARD, mViewModel.greetingType.get());
         assertEquals(standardGreeting, mViewModel.greetingMessage.get());
     }
 

@@ -3,7 +3,6 @@ package upday.mvpvsmvvm.mvvm;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -20,6 +19,7 @@ public class ViewModel implements IViewModel {
     private CompositeDisposable mSubscription;
 
     public ObservableField<String> greetingMessage = new ObservableField<>();
+    public ObservableField<GreetingType> greetingType = new ObservableField<>();
 
     int numberOfClicks;
 
@@ -40,18 +40,23 @@ public class ViewModel implements IViewModel {
 
     @Override
     public void onGreetingClicked() {
-        Observable<String> greetingObservable;
         numberOfClicks++;
         if (numberOfClicks % 2 == 0) {
-            greetingObservable = mDataModel.getStandardGreeting();
+            mSubscription.add(mDataModel.getStandardGreeting()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(greeting -> {
+                        greetingMessage.set(greeting);
+                        greetingType.set(GreetingType.STANDARD);
+                    }));
         } else {
-            greetingObservable = mDataModel.getDroidconGreeting();
+            mSubscription.add(mDataModel.getDroidconGreeting()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(greeting -> {
+                        greetingMessage.set(greeting);
+                        greetingType.set(GreetingType.DROIDCON);
+                    }));
         }
-        mSubscription.add(greetingObservable
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(greeting -> {
-                    greetingMessage.set(greeting);
-                }));
     }
 }

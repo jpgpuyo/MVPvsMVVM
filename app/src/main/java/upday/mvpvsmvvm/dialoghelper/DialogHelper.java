@@ -7,8 +7,16 @@ import upday.mvpvsmvvm.R;
 
 public class DialogHelper {
 
-    public void showDialog(Context context, String title, String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(context)
+    public void showStandardGreetingDialog(Context context, String title, String message) {
+        showDialog(context, title, message, R.style.standardGreeting);
+    }
+
+    public void showDroidconGreetingDialog(Context context, String title, String message) {
+        showDialog(context, title, message, R.style.droidconGreeting);
+    }
+
+    private void showDialog(Context context, String title, String message, int theme) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context, theme)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())

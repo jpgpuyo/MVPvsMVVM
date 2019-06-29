@@ -41,8 +41,13 @@ public class MVPActivity extends AppCompatActivity implements IView {
     }
 
     @Override
-    public void setGreeting(@NonNull final String greeting) {
-        dialogHelper.showDialog(this, greeting, greeting);
+    public void showStandardGreetingDialog(@NonNull final String greeting) {
+        dialogHelper.showStandardGreetingDialog(this, greeting, greeting);
+    }
+
+    @Override
+    public void showDroidconGreetingDialog(@NonNull final String greeting) {
+        dialogHelper.showDroidconGreetingDialog(this, greeting, greeting);
     }
 
     @NonNull

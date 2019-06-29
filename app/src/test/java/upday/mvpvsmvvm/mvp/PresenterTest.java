@@ -37,7 +37,7 @@ public class PresenterTest {
         mPresenter.numberOfClicks = 4;
         mPresenter.onGreetingClicked();
 
-        Mockito.verify(mView).setGreeting(droidconGreeting);
+        Mockito.verify(mView).showStandardGreetingDialog(droidconGreeting);
     }
 
     @Test
@@ -51,6 +51,6 @@ public class PresenterTest {
         mPresenter.numberOfClicks = 5;
         mPresenter.onGreetingClicked();
 
-        Mockito.verify(mView).setGreeting(standardGreeting);
+        Mockito.verify(mView).showStandardGreetingDialog(standardGreeting);
     }
 }

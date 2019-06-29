@@ -7,5 +7,7 @@ import android.support.annotation.NonNull;
  */
 public interface IView {
 
-    void setGreeting(@NonNull final String greeting);
+    void showStandardGreetingDialog(@NonNull final String greeting);
+
+    void showDroidconGreetingDialog(@NonNull final String greeting);
 }
