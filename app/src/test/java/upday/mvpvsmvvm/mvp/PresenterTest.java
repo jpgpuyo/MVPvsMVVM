@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import upday.mvpvsmvvm.datamodel.IDataModel;
 
 public class PresenterTest {
@@ -27,11 +27,12 @@ public class PresenterTest {
     }
 
     @Test
-    public void testGetGreeting_set_whenViewBinded() {
+    public void testGetGreeting_set_whenGreetingClicked() {
         String greeting = "Hello!";
         Mockito.when(mDataModel.getGreeting()).thenReturn(Observable.just(greeting));
 
         mPresenter.bind();
+        mPresenter.onGreetingClicked();
 
         Mockito.verify(mView).setGreeting(greeting);
     }

@@ -1,9 +1,9 @@
-package upday.mvpvsmvvm.mvp;
+package upday.mvpvsmvvm.mvvm;
 
 /**
  * Interface for the Presenter class in the MVP pattern.
  */
-public interface IPresenter {
+public interface IViewModel {
 
     void bind();
 

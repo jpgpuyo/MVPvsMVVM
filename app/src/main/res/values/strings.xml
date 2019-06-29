@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MVP vs MVVM</string>
+    <string name="button_greeting">Show greeting</string>
+    <string name="ok">OK</string>
 </resources>

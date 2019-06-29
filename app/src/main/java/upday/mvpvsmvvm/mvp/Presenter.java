@@ -2,7 +2,7 @@ package upday.mvpvsmvvm.mvp;
 
 import android.support.annotation.NonNull;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 import upday.mvpvsmvvm.datamodel.IDataModel;
 
 /**
@@ -16,7 +16,7 @@ public class Presenter implements IPresenter {
     @NonNull
     private final IView mView;
 
-    private CompositeSubscription mSubscription;
+    private CompositeDisposable mSubscription;
 
     public Presenter(@NonNull final IDataModel dataModel,
                      @NonNull final IView view) {
@@ -26,15 +26,17 @@ public class Presenter implements IPresenter {
 
     @Override
     public void bind() {
-        mSubscription = new CompositeSubscription();
+        mSubscription = new CompositeDisposable();
+    }
 
+    public void onGreetingClicked() {
         mSubscription.add(mDataModel.getGreeting()
-                                    .subscribe(this::setGreeting));
+                .subscribe(this::setGreeting));
     }
 
     @Override
     public void unBind() {
-        mSubscription.unsubscribe();
+        mSubscription.clear();
     }
 
     private void setGreeting(@NonNull final String greeting) {

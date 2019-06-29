@@ -2,25 +2,24 @@ package upday.mvpvsmvvm.mvvm;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+import android.widget.Button;
 
-import rx.subscriptions.CompositeSubscription;
 import upday.mvpvsmvvm.DroidconApplication;
 import upday.mvpvsmvvm.R;
 import upday.mvpvsmvvm.datamodel.IDataModel;
+import upday.mvpvsmvvm.dialoghelper.DialogHelper;
 
 public class MVVMActivity extends AppCompatActivity {
 
     @NonNull
-    private CompositeSubscription mSubscription;
-
-    @NonNull
     private ViewModel mViewModel;
 
-    @Nullable
-    private TextView mGreetingView;
+    @NonNull
+    private DialogHelper dialogHelper;
+
+    @NonNull
+    private Button buttonGreeting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,40 +27,30 @@ public class MVVMActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mViewModel = new ViewModel(getDataModel());
+        dialogHelper = new DialogHelper();
         setupViews();
     }
 
     private void setupViews() {
-        mGreetingView = (TextView) findViewById(R.id.greeting);
+        buttonGreeting = findViewById(R.id.buttonGreeting);
+        buttonGreeting.setOnClickListener(v -> mViewModel.onGreetingClicked());
+        mViewModel.greetingSubject.subscribe(this::setGreeting);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        bind();
+        mViewModel.bind();
     }
 
     @Override
     protected void onPause() {
-        unBind();
+        mViewModel.unBind();
         super.onPause();
     }
 
-    private void bind() {
-        mSubscription = new CompositeSubscription();
-
-        mSubscription.add(mViewModel.getGreeting()
-                                    .subscribe(this::setGreeting));
-    }
-
-    private void unBind() {
-        mSubscription.unsubscribe();
-    }
-
     private void setGreeting(@NonNull final String greeting) {
-        assert mGreetingView != null;
-
-        mGreetingView.setText(greeting);
+        dialogHelper.showDialog(this, greeting, greeting);
     }
 
     @NonNull

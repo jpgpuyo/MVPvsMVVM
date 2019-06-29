@@ -2,7 +2,7 @@ package upday.mvpvsmvvm.datamodel;
 
 import android.support.annotation.NonNull;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public class DataModel implements IDataModel {
 
